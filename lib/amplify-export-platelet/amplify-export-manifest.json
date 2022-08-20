@@ -1,0 +1,207 @@
+{
+  "stackName": "amplify-platelet-dev-95819",
+  "props": {
+    "templateFile": "root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-platelet-dev-95819-authRole",
+      "UnauthRoleName": "amplify-platelet-dev-95819-unauthRole",
+      "DeploymentBucketName": "amplify-platelet-dev-95819-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "apiplatelet": {
+        "templateFile": "api\\platelet\\cloudformation-template.json",
+        "parameters": {
+          "AppSyncApiName": "platelet",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": false,
+          "S3DeploymentBucket": "amplify-platelet-dev-95819-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/6eb7b2ba58e49c6aba19af7d48f10a182916615f",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "authplatelet61a0ac07": {
+        "templateFile": "auth\\platelet61a0ac07\\platelet61a0ac07-cloudformation-template.json",
+        "parameters": {
+          "authSelections": "identityPoolAndUserPool",
+          "requiredAttributes": [
+            "email"
+          ],
+          "resourceName": "platelet61a0ac07",
+          "serviceName": "Cognito",
+          "useDefault": "default",
+          "userpoolClientReadAttributes": [
+            "email"
+          ],
+          "userpoolClientWriteAttributes": [
+            "email"
+          ],
+          "aliasAttributes": [
+            "email"
+          ],
+          "resourceNameTruncated": "platel61a0ac07",
+          "sharedId": "61a0ac07",
+          "userPoolGroupList": [],
+          "userPoolName": "platelet61a0ac07_userpool_61a0ac07",
+          "usernameCaseSensitive": false,
+          "userpoolClientRefreshTokenValidity": 30,
+          "userpoolClientSetAttributes": false,
+          "userpoolClientGenerateSecret": false,
+          "userpoolClientLambdaRole": "platel61a0ac07_userpoolclient_lambda_role",
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8,
+          "mfaConfiguration": "OFF",
+          "mfaTypes": [
+            "SMS Text Message"
+          ],
+          "smsAuthenticationMessage": "Your authentication code is {####}",
+          "emailVerificationMessage": "Your verification code is {####}",
+          "emailVerificationSubject": "Your verification code",
+          "smsVerificationMessage": "Your verification code is {####}",
+          "autoVerifiedAttributes": [
+            "email"
+          ],
+          "identityPoolName": "platelet61a0ac07_identitypool_61a0ac07",
+          "allowUnauthenticatedIdentities": false,
+          "breakCircularDependency": true,
+          "useEnabledMfas": false,
+          "dependsOn": [],
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionPlateletTaskResolvers": {
+        "templateFile": "function\\PlateletTaskResolvers\\PlateletTaskResolvers-cloudformation-template.json",
+        "parameters": {
+          "deploymentBucketName": "amplify-platelet-dev-95819-deployment",
+          "s3Key": "amplify-builds/PlateletTaskResolvers-4170687164436d447541-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionplateletAddNewTenant": {
+        "templateFile": "function\\plateletAddNewTenant\\plateletAddNewTenant-cloudformation-template.json",
+        "parameters": {
+          "plateletWelcomeEmail": "info@example.com",
+          "plateletDomainName": "app.example.com",
+          "deploymentBucketName": "amplify-platelet-dev-95819-deployment",
+          "s3Key": "amplify-builds/plateletAddNewTenant-6e672b55524e7377434f-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionplateletAdminAddNewUser": {
+        "templateFile": "function\\plateletAdminAddNewUser\\plateletAdminAddNewUser-cloudformation-template.json",
+        "parameters": {
+          "plateletWelcomeEmail": "info@example.com",
+          "plateletDomainName": "app.example.com",
+          "deploymentBucketName": "amplify-platelet-dev-95819-deployment",
+          "s3Key": "amplify-builds/plateletAdminAddNewUser-6f6e63525538716a5857-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionplateletAdminChangeUserRoles": {
+        "templateFile": "function\\plateletAdminChangeUserRoles\\plateletAdminChangeUserRoles-cloudformation-template.json",
+        "parameters": {
+          "deploymentBucketName": "amplify-platelet-dev-95819-deployment",
+          "s3Key": "amplify-builds/plateletAdminChangeUserRoles-68504546467978455a68-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionplateletImageResize": {
+        "templateFile": "function\\plateletImageResize\\plateletImageResize-cloudformation-template.json",
+        "parameters": {
+          "resizeHeight": 300,
+          "resizeWidth": 300,
+          "thumbnailHeight": 128,
+          "thumbnailWidth": 128,
+          "deploymentBucketName": "amplify-platelet-dev-95819-deployment",
+          "s3Key": "amplify-builds/plateletImageResize-2f3656452f3134473961-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionplateletProfilePictureResolver": {
+        "templateFile": "function\\plateletProfilePictureResolver\\plateletProfilePictureResolver-cloudformation-template.json",
+        "parameters": {
+          "deploymentBucketName": "amplify-platelet-dev-95819-deployment",
+          "s3Key": "amplify-builds/plateletProfilePictureResolver-74616a7276794d574137-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionplateletProfilePictureUploadURLResolver": {
+        "templateFile": "function\\plateletProfilePictureUploadURLResolver\\plateletProfilePictureUploadURLResolver-cloudformation-template.json",
+        "parameters": {
+          "deploymentBucketName": "amplify-platelet-dev-95819-deployment",
+          "s3Key": "amplify-builds/plateletProfilePictureUploadURLResolver-6265474339726f4f3438-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "geoplateletPlace": {
+        "templateFile": "geo\\plateletPlace\\plateletPlace-cloudformation-template.json",
+        "parameters": {
+          "indexName": "plateletPlace",
+          "dataProvider": "Here",
+          "dataSourceIntendedUse": "SingleUse",
+          "isDefault": true,
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "hostingamplifyhosting": {
+        "templateFile": "hosting\\amplifyhosting\\amplifyhosting-template.json",
+        "parameters": {
+          "appId": "dlltrcnl6x77u",
+          "type": "manual",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "storageplateletStorage": {
+        "templateFile": "storage\\plateletStorage\\cloudformation-template.json",
+        "parameters": {
+          "bucketName": "platelet26fb7449fb884a3eb4c5fd7539c78dd3",
+          "selectedGuestPermissions": [],
+          "selectedAuthenticatedPermissions": [
+            "s3:GetObject",
+            "s3:ListBucket"
+          ],
+          "s3PrivatePolicy": "Private_policy_233be779",
+          "s3ProtectedPolicy": "Protected_policy_233be779",
+          "s3PublicPolicy": "Public_policy_233be779",
+          "s3ReadPolicy": "read_policy_233be779",
+          "s3UploadsPolicy": "Uploads_policy_233be779",
+          "authPolicyName": "s3_amplify_233be779",
+          "unauthPolicyName": "s3_amplify_233be779",
+          "AuthenticatedAllowList": "ALLOW",
+          "GuestAllowList": "DISALLOW",
+          "s3PermissionsAuthenticatedPrivate": "s3:GetObject",
+          "s3PermissionsAuthenticatedProtected": "s3:GetObject",
+          "s3PermissionsAuthenticatedPublic": "s3:GetObject",
+          "s3PermissionsAuthenticatedUploads": "DISALLOW",
+          "s3PermissionsGuestPublic": "DISALLOW",
+          "s3PermissionsGuestUploads": "DISALLOW",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      }
+    }
+  }
+}

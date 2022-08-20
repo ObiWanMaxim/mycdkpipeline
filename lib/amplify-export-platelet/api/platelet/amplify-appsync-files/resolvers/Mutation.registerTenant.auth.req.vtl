@@ -1,0 +1,28 @@
+## [Start] Field Authorization Steps. **
+#set( $isAuthorized = false )
+#if( $util.authType() == "IAM Authorization" )
+  #set( $adminRoles = ["eu-west-1_kky6UXYyP_Full-access/CognitoIdentityCredentials","eu-west-1_kky6UXYyP_Manage-only/CognitoIdentityCredentials","plateletAdminAddNewUser-dev","plateletAddNewTenant-dev","plateletAdminChangeUserRoles-dev","plateletProfilePictureUploadURLResolver-dev"] )
+  #foreach( $adminRole in $adminRoles )
+    #if( $ctx.identity.userArn.contains($adminRole) && $ctx.identity.userArn != $ctx.stash.authRole && $ctx.identity.userArn != $ctx.stash.unauthRole )
+      #return($context.source.registerTenant)
+    #end
+  #end
+$util.unauthorized()
+#end
+#if( $util.authType() == "User Pool Authorization" )
+  #if( !$isAuthorized )
+    #set( $staticGroupRoles = [{"claim":"cognito:groups","entity":"SUPER"}] )
+    #foreach( $groupRole in $staticGroupRoles )
+      #set( $groupsInToken = $util.defaultIfNull($ctx.identity.claims.get($groupRole.claim), []) )
+      #if( $groupsInToken.contains($groupRole.entity) )
+        #set( $isAuthorized = true )
+        #break
+      #end
+    #end
+  #end
+#end
+#if( !$isAuthorized )
+$util.unauthorized()
+#end
+$util.toJson({"version":"2018-05-29","payload":{}})
+## [End] Field Authorization Steps. **

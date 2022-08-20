@@ -1,0 +1,62 @@
+[
+  {
+    "category": "auth",
+    "resourceName": "platelet61a0ac07",
+    "service": "Cognito"
+  },
+  {
+    "category": "api",
+    "resourceName": "platelet",
+    "service": "AppSync"
+  },
+  {
+    "category": "function",
+    "resourceName": "PlateletTaskResolvers",
+    "service": "Lambda"
+  },
+  {
+    "category": "function",
+    "resourceName": "plateletImageResize",
+    "service": "Lambda"
+  },
+  {
+    "category": "function",
+    "resourceName": "plateletAdminAddNewUser",
+    "service": "Lambda"
+  },
+  {
+    "category": "function",
+    "resourceName": "plateletAddNewTenant",
+    "service": "Lambda"
+  },
+  {
+    "category": "function",
+    "resourceName": "plateletAdminChangeUserRoles",
+    "service": "Lambda"
+  },
+  {
+    "category": "function",
+    "resourceName": "plateletProfilePictureUploadURLResolver",
+    "service": "Lambda"
+  },
+  {
+    "category": "function",
+    "resourceName": "plateletProfilePictureResolver",
+    "service": "Lambda"
+  },
+  {
+    "category": "geo",
+    "resourceName": "plateletPlace",
+    "service": "PlaceIndex"
+  },
+  {
+    "category": "storage",
+    "resourceName": "plateletStorage",
+    "service": "S3"
+  },
+  {
+    "category": "hosting",
+    "resourceName": "amplifyhosting",
+    "service": "amplifyhosting"
+  }
+]

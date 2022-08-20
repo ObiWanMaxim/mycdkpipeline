@@ -1,0 +1,1518 @@
+
+type Tenant @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  name: String!
+  referenceIdentifier: String!
+  admin: User!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  tenantAdminId: ID!
+}
+
+type User @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  username: String!
+  cognitoId: ID!
+  tenantId: ID!
+  contact: AddressAndContactDetails
+  displayName: String!
+  name: String
+  roles: [Role!]!
+  dateOfBirth: AWSDate
+  riderResponsibility: String
+  possibleRiderResponsibilities(filter: ModelPossibleRiderResponsibilitiesFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPossibleRiderResponsibilitiesConnection
+  profilePictureURL(width: Int, height: Int): AWSURL
+  profilePicture: S3Object
+  comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+  assignments(taskId: ModelIDKeyConditionInput, filter: ModelTaskAssigneeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskAssigneeConnection
+  vehicleAssignments(filter: ModelVehicleAssignmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelVehicleAssignmentConnection
+  createdTasks(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
+  disabled: Int
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type PossibleRiderResponsibilities @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  user: User!
+  riderResponsibility: RiderResponsibility!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  userPossibleRiderResponsibilitiesId: ID
+  riderResponsibilityPossibleUsersId: ID
+}
+
+type S3Object @aws_iam @aws_cognito_user_pools {
+  bucket: String!
+  key: String!
+  region: String!
+}
+
+type Vehicle @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  name: String
+  manufacturer: String
+  model: String
+  dateOfManufacture: AWSDate
+  dateOfRegistration: AWSDate
+  assignments(filter: ModelVehicleAssignmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelVehicleAssignmentConnection
+  comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+  disabled: Int
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type VehicleAssignment @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  vehicle: Vehicle!
+  assignee: User!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  userVehicleAssignmentsId: ID
+  vehicleAssignmentsId: ID
+}
+
+type AddressAndContactDetails @aws_iam @aws_cognito_user_pools {
+  name: String
+  telephoneNumber: String
+  mobileNumber: String
+  emailAddress: String
+  ward: String
+  line1: String
+  line2: String
+  line3: String
+  town: String
+  county: String
+  state: String
+  country: String
+  postcode: String
+  what3words: String
+}
+
+type Location @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  name: String
+  listed: Int
+  contact: AddressAndContactDetails
+  ward: String
+  line1: String
+  line2: String
+  line3: String
+  town: String
+  county: String
+  state: String
+  country: String
+  postcode: String
+  what3words: String
+  tasksAsPickUp(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
+  tasksAsDropOff(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
+  taskAsEstablishment(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
+  comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+  disabled: Int
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Task @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  createdBy: User
+  timeOfCall: AWSDateTime
+  timePickedUp: AWSDateTime
+  timeDroppedOff: AWSDateTime
+  timeCancelled: AWSDateTime
+  timeRejected: AWSDateTime
+  timeRiderHome: AWSDateTime
+  requesterContact: AddressAndContactDetails
+  pickUpLocationId: ID
+  dropOffLocationId: ID
+  establishmentLocationId: ID
+  pickUpLocation: Location
+  dropOffLocation: Location
+  establishmentLocation: Location
+  riderResponsibility: String
+  assignees(assigneeId: ModelIDKeyConditionInput, filter: ModelTaskAssigneeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskAssigneeConnection
+  priority: Priority
+  deliverables(filter: ModelDeliverableFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDeliverableConnection
+  comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+  status: TaskStatus
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  userCreatedTasksId: ID
+}
+
+type TaskAssignee @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  taskId: ID!
+  assigneeId: ID!
+  role: Role!
+  task: Task!
+  assignee: User!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Comment @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  parentId: ID
+  tenantId: ID!
+  body: String
+  author: User
+  visibility: CommentVisibility
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  userCommentsId: ID
+  owner: String
+}
+
+type DeliverableType @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  label: String!
+  tenantId: ID!
+  icon: DeliverableTypeIcon
+  defaultUnit: DeliverableUnit
+  deliverables(filter: ModelDeliverableFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDeliverableConnection
+  tags: [String]
+  disabled: Int
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Deliverable @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  deliverableType: DeliverableType
+  task: Task
+  count: Int
+  unit: DeliverableUnit
+  orderInGrid: Int
+  comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  taskDeliverablesId: ID
+  deliverableTypeDeliverablesId: ID
+}
+
+enum DeliverableTypeIcon {
+  BUG
+  CHILD
+  DOCUMENT
+  EQUIPMENT
+  OTHER
+}
+
+type RiderResponsibility @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  tenantId: ID!
+  label: String!
+  disabled: Int
+  possibleUsers(filter: ModelPossibleRiderResponsibilitiesFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPossibleRiderResponsibilitiesConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+enum TaskStatus {
+  NEW
+  ACTIVE
+  PICKED_UP
+  DROPPED_OFF
+  CANCELLED
+  REJECTED
+  ABANDONED
+  COMPLETED
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum Patch {
+  NORTH
+  WEST
+  EAST
+  SOUTH
+  RELIEF
+  AIR_AMBULANCE
+}
+
+enum DeliverableUnit {
+  NONE
+  LITRE
+  MILLILITRE
+  GRAM
+  ITEM
+  BOX
+}
+
+enum Role {
+  USER
+  COORDINATOR
+  RIDER
+  ADMIN
+}
+
+enum CommentVisibility {
+  EVERYONE
+  ME
+}
+
+type Mutation {
+  createTenant(input: CreateTenantInput!, condition: ModelTenantConditionInput): Tenant @aws_iam @aws_cognito_user_pools
+  updateTenant(input: UpdateTenantInput!, condition: ModelTenantConditionInput): Tenant @aws_iam @aws_cognito_user_pools
+  deleteTenant(input: DeleteTenantInput!, condition: ModelTenantConditionInput): Tenant @aws_iam @aws_cognito_user_pools
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User @aws_iam @aws_cognito_user_pools
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User @aws_iam @aws_cognito_user_pools
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User @aws_iam @aws_cognito_user_pools
+  createPossibleRiderResponsibilities(input: CreatePossibleRiderResponsibilitiesInput!, condition: ModelPossibleRiderResponsibilitiesConditionInput): PossibleRiderResponsibilities @aws_iam @aws_cognito_user_pools
+  updatePossibleRiderResponsibilities(input: UpdatePossibleRiderResponsibilitiesInput!, condition: ModelPossibleRiderResponsibilitiesConditionInput): PossibleRiderResponsibilities @aws_iam @aws_cognito_user_pools
+  deletePossibleRiderResponsibilities(input: DeletePossibleRiderResponsibilitiesInput!, condition: ModelPossibleRiderResponsibilitiesConditionInput): PossibleRiderResponsibilities @aws_iam @aws_cognito_user_pools
+  createVehicle(input: CreateVehicleInput!, condition: ModelVehicleConditionInput): Vehicle @aws_iam @aws_cognito_user_pools
+  updateVehicle(input: UpdateVehicleInput!, condition: ModelVehicleConditionInput): Vehicle @aws_iam @aws_cognito_user_pools
+  deleteVehicle(input: DeleteVehicleInput!, condition: ModelVehicleConditionInput): Vehicle @aws_iam @aws_cognito_user_pools
+  createVehicleAssignment(input: CreateVehicleAssignmentInput!, condition: ModelVehicleAssignmentConditionInput): VehicleAssignment @aws_iam @aws_cognito_user_pools
+  updateVehicleAssignment(input: UpdateVehicleAssignmentInput!, condition: ModelVehicleAssignmentConditionInput): VehicleAssignment @aws_iam @aws_cognito_user_pools
+  deleteVehicleAssignment(input: DeleteVehicleAssignmentInput!, condition: ModelVehicleAssignmentConditionInput): VehicleAssignment @aws_iam @aws_cognito_user_pools
+  createLocation(input: CreateLocationInput!, condition: ModelLocationConditionInput): Location @aws_iam @aws_cognito_user_pools
+  updateLocation(input: UpdateLocationInput!, condition: ModelLocationConditionInput): Location @aws_iam @aws_cognito_user_pools
+  deleteLocation(input: DeleteLocationInput!, condition: ModelLocationConditionInput): Location @aws_iam @aws_cognito_user_pools
+  createTask(input: CreateTaskInput!, condition: ModelTaskConditionInput): Task @aws_iam @aws_cognito_user_pools
+  updateTask(input: UpdateTaskInput!, condition: ModelTaskConditionInput): Task @aws_iam @aws_cognito_user_pools
+  deleteTask(input: DeleteTaskInput!, condition: ModelTaskConditionInput): Task @aws_iam @aws_cognito_user_pools
+  createTaskAssignee(input: CreateTaskAssigneeInput!, condition: ModelTaskAssigneeConditionInput): TaskAssignee @aws_iam @aws_cognito_user_pools
+  updateTaskAssignee(input: UpdateTaskAssigneeInput!, condition: ModelTaskAssigneeConditionInput): TaskAssignee @aws_iam @aws_cognito_user_pools
+  deleteTaskAssignee(input: DeleteTaskAssigneeInput!, condition: ModelTaskAssigneeConditionInput): TaskAssignee @aws_iam @aws_cognito_user_pools
+  createComment(input: CreateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_iam @aws_cognito_user_pools
+  updateComment(input: UpdateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_iam @aws_cognito_user_pools
+  deleteComment(input: DeleteCommentInput!, condition: ModelCommentConditionInput): Comment @aws_iam @aws_cognito_user_pools
+  createDeliverableType(input: CreateDeliverableTypeInput!, condition: ModelDeliverableTypeConditionInput): DeliverableType @aws_iam @aws_cognito_user_pools
+  updateDeliverableType(input: UpdateDeliverableTypeInput!, condition: ModelDeliverableTypeConditionInput): DeliverableType @aws_iam @aws_cognito_user_pools
+  deleteDeliverableType(input: DeleteDeliverableTypeInput!, condition: ModelDeliverableTypeConditionInput): DeliverableType @aws_iam @aws_cognito_user_pools
+  createDeliverable(input: CreateDeliverableInput!, condition: ModelDeliverableConditionInput): Deliverable @aws_iam @aws_cognito_user_pools
+  updateDeliverable(input: UpdateDeliverableInput!, condition: ModelDeliverableConditionInput): Deliverable @aws_iam @aws_cognito_user_pools
+  deleteDeliverable(input: DeleteDeliverableInput!, condition: ModelDeliverableConditionInput): Deliverable @aws_iam @aws_cognito_user_pools
+  createRiderResponsibility(input: CreateRiderResponsibilityInput!, condition: ModelRiderResponsibilityConditionInput): RiderResponsibility @aws_iam @aws_cognito_user_pools
+  updateRiderResponsibility(input: UpdateRiderResponsibilityInput!, condition: ModelRiderResponsibilityConditionInput): RiderResponsibility @aws_iam @aws_cognito_user_pools
+  deleteRiderResponsibility(input: DeleteRiderResponsibilityInput!, condition: ModelRiderResponsibilityConditionInput): RiderResponsibility @aws_iam @aws_cognito_user_pools
+  registerUser(name: String, email: String, tenantId: ID, roles: [Role]): User @aws_iam @aws_cognito_user_pools
+  registerTenant(name: String, emailAddress: String, tenantName: String): Tenant @aws_iam @aws_cognito_user_pools
+  updateUserRoles(userId: ID, roles: [Role]): User @aws_iam @aws_cognito_user_pools
+}
+
+type Statistics {
+  numCancelled: Int
+  numCompleted: Int
+  numDroppedOff: Int
+  numRejected: Int
+  numAbandoned: Int
+  numActive: Int
+  numPickedUp: Int
+  numNew: Int
+  numTest: Int
+}
+
+type Query {
+  getTenant(id: ID!): Tenant @aws_iam @aws_cognito_user_pools
+  listTenants(filter: ModelTenantFilterInput, limit: Int, nextToken: String): ModelTenantConnection @aws_iam @aws_cognito_user_pools
+  syncTenants(filter: ModelTenantFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelTenantConnection @aws_iam @aws_cognito_user_pools
+  getUser(id: ID!): User @aws_iam @aws_cognito_user_pools
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection @aws_iam @aws_cognito_user_pools
+  syncUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserConnection @aws_iam @aws_cognito_user_pools
+  getUserByCognitoId(cognitoId: ID!, sortDirection: ModelSortDirection, filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection @aws_iam @aws_cognito_user_pools
+  getPossibleRiderResponsibilities(id: ID!): PossibleRiderResponsibilities @aws_iam @aws_cognito_user_pools
+  listPossibleRiderResponsibilities(filter: ModelPossibleRiderResponsibilitiesFilterInput, limit: Int, nextToken: String): ModelPossibleRiderResponsibilitiesConnection @aws_iam @aws_cognito_user_pools
+  syncPossibleRiderResponsibilities(filter: ModelPossibleRiderResponsibilitiesFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelPossibleRiderResponsibilitiesConnection @aws_iam @aws_cognito_user_pools
+  getVehicle(id: ID!): Vehicle @aws_iam @aws_cognito_user_pools
+  listVehicles(filter: ModelVehicleFilterInput, limit: Int, nextToken: String): ModelVehicleConnection @aws_iam @aws_cognito_user_pools
+  syncVehicles(filter: ModelVehicleFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelVehicleConnection @aws_iam @aws_cognito_user_pools
+  getVehicleAssignment(id: ID!): VehicleAssignment @aws_iam @aws_cognito_user_pools
+  listVehicleAssignments(filter: ModelVehicleAssignmentFilterInput, limit: Int, nextToken: String): ModelVehicleAssignmentConnection @aws_iam @aws_cognito_user_pools
+  syncVehicleAssignments(filter: ModelVehicleAssignmentFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelVehicleAssignmentConnection @aws_iam @aws_cognito_user_pools
+  getLocation(id: ID!): Location @aws_iam @aws_cognito_user_pools
+  listLocations(filter: ModelLocationFilterInput, limit: Int, nextToken: String): ModelLocationConnection @aws_iam @aws_cognito_user_pools
+  syncLocations(filter: ModelLocationFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelLocationConnection @aws_iam @aws_cognito_user_pools
+  getTask(id: ID!): Task @aws_iam @aws_cognito_user_pools
+  listTasks(filter: ModelTaskFilterInput, limit: Int, nextToken: String): ModelTaskConnection @aws_iam @aws_cognito_user_pools
+  syncTasks(filter: ModelTaskFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelTaskConnection @aws_iam @aws_cognito_user_pools
+  tasksByStatus(status: TaskStatus!, sortDirection: ModelSortDirection, filter: ModelTaskFilterInput, limit: Int, nextToken: String): ModelTaskConnection @aws_iam @aws_cognito_user_pools
+  getTaskAssignee(id: ID!): TaskAssignee @aws_iam @aws_cognito_user_pools
+  listTaskAssignees(filter: ModelTaskAssigneeFilterInput, limit: Int, nextToken: String): ModelTaskAssigneeConnection @aws_iam @aws_cognito_user_pools
+  syncTaskAssignees(filter: ModelTaskAssigneeFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelTaskAssigneeConnection @aws_iam @aws_cognito_user_pools
+  getComment(id: ID!): Comment @aws_iam @aws_cognito_user_pools
+  listComments(filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection @aws_iam @aws_cognito_user_pools
+  syncComments(filter: ModelCommentFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelCommentConnection @aws_iam @aws_cognito_user_pools
+  getDeliverableType(id: ID!): DeliverableType @aws_iam @aws_cognito_user_pools
+  listDeliverableTypes(filter: ModelDeliverableTypeFilterInput, limit: Int, nextToken: String): ModelDeliverableTypeConnection @aws_iam @aws_cognito_user_pools
+  syncDeliverableTypes(filter: ModelDeliverableTypeFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelDeliverableTypeConnection @aws_iam @aws_cognito_user_pools
+  getDeliverable(id: ID!): Deliverable @aws_iam @aws_cognito_user_pools
+  listDeliverables(filter: ModelDeliverableFilterInput, limit: Int, nextToken: String): ModelDeliverableConnection @aws_iam @aws_cognito_user_pools
+  syncDeliverables(filter: ModelDeliverableFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelDeliverableConnection @aws_iam @aws_cognito_user_pools
+  getRiderResponsibility(id: ID!): RiderResponsibility @aws_iam @aws_cognito_user_pools
+  listRiderResponsibilities(filter: ModelRiderResponsibilityFilterInput, limit: Int, nextToken: String): ModelRiderResponsibilityConnection @aws_iam @aws_cognito_user_pools
+  syncRiderResponsibilities(filter: ModelRiderResponsibilityFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelRiderResponsibilityConnection @aws_iam @aws_cognito_user_pools
+  profilePictureUploadURL(userId: ID!): AWSURL @aws_iam @aws_cognito_user_pools
+  getStatistics(tenantId: ID!): Statistics @aws_iam @aws_cognito_user_pools
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelTenantConnection @aws_iam @aws_cognito_user_pools {
+  items: [Tenant]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelTenantFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  referenceIdentifier: ModelStringInput
+  and: [ModelTenantFilterInput]
+  or: [ModelTenantFilterInput]
+  not: ModelTenantFilterInput
+  tenantAdminId: ModelIDInput
+}
+
+input ModelTenantConditionInput {
+  name: ModelStringInput
+  referenceIdentifier: ModelStringInput
+  and: [ModelTenantConditionInput]
+  or: [ModelTenantConditionInput]
+  not: ModelTenantConditionInput
+  tenantAdminId: ModelIDInput
+}
+
+input CreateTenantInput {
+  id: ID
+  name: String!
+  referenceIdentifier: String!
+  _version: Int
+  tenantAdminId: ID!
+}
+
+input UpdateTenantInput {
+  id: ID!
+  name: String
+  referenceIdentifier: String
+  _version: Int
+  tenantAdminId: ID!
+}
+
+input DeleteTenantInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionTenantFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  referenceIdentifier: ModelSubscriptionStringInput
+  and: [ModelSubscriptionTenantFilterInput]
+  or: [ModelSubscriptionTenantFilterInput]
+}
+
+type Subscription {
+  onCreateTenant: Tenant @aws_subscribe(mutations: ["createTenant"]) @aws_iam @aws_cognito_user_pools
+  onUpdateTenant: Tenant @aws_subscribe(mutations: ["updateTenant"]) @aws_iam @aws_cognito_user_pools
+  onDeleteTenant: Tenant @aws_subscribe(mutations: ["deleteTenant"]) @aws_iam @aws_cognito_user_pools
+  onCreateUser: User @aws_subscribe(mutations: ["createUser"]) @aws_iam @aws_cognito_user_pools
+  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"]) @aws_iam @aws_cognito_user_pools
+  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"]) @aws_iam @aws_cognito_user_pools
+  onCreatePossibleRiderResponsibilities: PossibleRiderResponsibilities @aws_subscribe(mutations: ["createPossibleRiderResponsibilities"]) @aws_iam @aws_cognito_user_pools
+  onUpdatePossibleRiderResponsibilities: PossibleRiderResponsibilities @aws_subscribe(mutations: ["updatePossibleRiderResponsibilities"]) @aws_iam @aws_cognito_user_pools
+  onDeletePossibleRiderResponsibilities: PossibleRiderResponsibilities @aws_subscribe(mutations: ["deletePossibleRiderResponsibilities"]) @aws_iam @aws_cognito_user_pools
+  onCreateVehicle: Vehicle @aws_subscribe(mutations: ["createVehicle"]) @aws_iam @aws_cognito_user_pools
+  onUpdateVehicle: Vehicle @aws_subscribe(mutations: ["updateVehicle"]) @aws_iam @aws_cognito_user_pools
+  onDeleteVehicle: Vehicle @aws_subscribe(mutations: ["deleteVehicle"]) @aws_iam @aws_cognito_user_pools
+  onCreateVehicleAssignment: VehicleAssignment @aws_subscribe(mutations: ["createVehicleAssignment"]) @aws_iam @aws_cognito_user_pools
+  onUpdateVehicleAssignment: VehicleAssignment @aws_subscribe(mutations: ["updateVehicleAssignment"]) @aws_iam @aws_cognito_user_pools
+  onDeleteVehicleAssignment: VehicleAssignment @aws_subscribe(mutations: ["deleteVehicleAssignment"]) @aws_iam @aws_cognito_user_pools
+  onCreateLocation: Location @aws_subscribe(mutations: ["createLocation"]) @aws_iam @aws_cognito_user_pools
+  onUpdateLocation: Location @aws_subscribe(mutations: ["updateLocation"]) @aws_iam @aws_cognito_user_pools
+  onDeleteLocation: Location @aws_subscribe(mutations: ["deleteLocation"]) @aws_iam @aws_cognito_user_pools
+  onCreateTask: Task @aws_subscribe(mutations: ["createTask"]) @aws_iam @aws_cognito_user_pools
+  onUpdateTask: Task @aws_subscribe(mutations: ["updateTask"]) @aws_iam @aws_cognito_user_pools
+  onDeleteTask: Task @aws_subscribe(mutations: ["deleteTask"]) @aws_iam @aws_cognito_user_pools
+  onCreateTaskAssignee: TaskAssignee @aws_subscribe(mutations: ["createTaskAssignee"]) @aws_iam @aws_cognito_user_pools
+  onUpdateTaskAssignee: TaskAssignee @aws_subscribe(mutations: ["updateTaskAssignee"]) @aws_iam @aws_cognito_user_pools
+  onDeleteTaskAssignee: TaskAssignee @aws_subscribe(mutations: ["deleteTaskAssignee"]) @aws_iam @aws_cognito_user_pools
+  onCreateComment(owner: String): Comment @aws_subscribe(mutations: ["createComment"]) @aws_iam @aws_cognito_user_pools
+  onUpdateComment(owner: String): Comment @aws_subscribe(mutations: ["updateComment"]) @aws_iam @aws_cognito_user_pools
+  onDeleteComment(owner: String): Comment @aws_subscribe(mutations: ["deleteComment"]) @aws_iam @aws_cognito_user_pools
+  onCreateDeliverableType: DeliverableType @aws_subscribe(mutations: ["createDeliverableType"]) @aws_iam @aws_cognito_user_pools
+  onUpdateDeliverableType: DeliverableType @aws_subscribe(mutations: ["updateDeliverableType"]) @aws_iam @aws_cognito_user_pools
+  onDeleteDeliverableType: DeliverableType @aws_subscribe(mutations: ["deleteDeliverableType"]) @aws_iam @aws_cognito_user_pools
+  onCreateDeliverable: Deliverable @aws_subscribe(mutations: ["createDeliverable"]) @aws_iam @aws_cognito_user_pools
+  onUpdateDeliverable: Deliverable @aws_subscribe(mutations: ["updateDeliverable"]) @aws_iam @aws_cognito_user_pools
+  onDeleteDeliverable: Deliverable @aws_subscribe(mutations: ["deleteDeliverable"]) @aws_iam @aws_cognito_user_pools
+  onCreateRiderResponsibility: RiderResponsibility @aws_subscribe(mutations: ["createRiderResponsibility"]) @aws_iam @aws_cognito_user_pools
+  onUpdateRiderResponsibility: RiderResponsibility @aws_subscribe(mutations: ["updateRiderResponsibility"]) @aws_iam @aws_cognito_user_pools
+  onDeleteRiderResponsibility: RiderResponsibility @aws_subscribe(mutations: ["deleteRiderResponsibility"]) @aws_iam @aws_cognito_user_pools
+}
+
+input AddressAndContactDetailsInput {
+  name: String
+  telephoneNumber: String
+  mobileNumber: String
+  emailAddress: String
+  ward: String
+  line1: String
+  line2: String
+  line3: String
+  town: String
+  county: String
+  state: String
+  country: String
+  postcode: String
+  what3words: String
+}
+
+input S3ObjectInput {
+  bucket: String!
+  key: String!
+  region: String!
+}
+
+type ModelUserConnection @aws_iam @aws_cognito_user_pools {
+  items: [User]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelRoleInput {
+  eq: Role
+  ne: Role
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  username: ModelStringInput
+  cognitoId: ModelIDInput
+  tenantId: ModelIDInput
+  displayName: ModelStringInput
+  name: ModelStringInput
+  roles: ModelRoleInput
+  dateOfBirth: ModelStringInput
+  riderResponsibility: ModelStringInput
+  profilePictureURL: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+input ModelUserConditionInput {
+  username: ModelStringInput
+  cognitoId: ModelIDInput
+  tenantId: ModelIDInput
+  displayName: ModelStringInput
+  name: ModelStringInput
+  roles: ModelRoleInput
+  dateOfBirth: ModelStringInput
+  riderResponsibility: ModelStringInput
+  profilePictureURL: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+}
+
+input CreateUserInput {
+  id: ID
+  username: String!
+  cognitoId: ID!
+  tenantId: ID!
+  contact: AddressAndContactDetailsInput
+  displayName: String!
+  name: String
+  roles: [Role!]!
+  dateOfBirth: AWSDate
+  riderResponsibility: String
+  profilePictureURL: AWSURL
+  profilePicture: S3ObjectInput
+  disabled: Int
+  _version: Int
+}
+
+input UpdateUserInput {
+  id: ID!
+  username: String
+  cognitoId: ID
+  tenantId: ID
+  contact: AddressAndContactDetailsInput
+  displayName: String
+  name: String
+  roles: [Role!]
+  dateOfBirth: AWSDate
+  riderResponsibility: String
+  profilePictureURL: AWSURL
+  profilePicture: S3ObjectInput
+  disabled: Int
+  _version: Int
+}
+
+input DeleteUserInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionUserFilterInput {
+  id: ModelSubscriptionIDInput
+  username: ModelSubscriptionStringInput
+  tenantId: ModelSubscriptionIDInput
+  displayName: ModelSubscriptionStringInput
+  name: ModelSubscriptionStringInput
+  roles: ModelSubscriptionStringInput
+  dateOfBirth: ModelSubscriptionStringInput
+  riderResponsibility: ModelSubscriptionStringInput
+  profilePictureURL: ModelSubscriptionStringInput
+  disabled: ModelSubscriptionIntInput
+  and: [ModelSubscriptionUserFilterInput]
+  or: [ModelSubscriptionUserFilterInput]
+}
+
+type ModelPossibleRiderResponsibilitiesConnection @aws_iam @aws_cognito_user_pools {
+  items: [PossibleRiderResponsibilities]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelPossibleRiderResponsibilitiesFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  and: [ModelPossibleRiderResponsibilitiesFilterInput]
+  or: [ModelPossibleRiderResponsibilitiesFilterInput]
+  not: ModelPossibleRiderResponsibilitiesFilterInput
+  userPossibleRiderResponsibilitiesId: ModelIDInput
+  riderResponsibilityPossibleUsersId: ModelIDInput
+}
+
+input ModelPossibleRiderResponsibilitiesConditionInput {
+  tenantId: ModelIDInput
+  and: [ModelPossibleRiderResponsibilitiesConditionInput]
+  or: [ModelPossibleRiderResponsibilitiesConditionInput]
+  not: ModelPossibleRiderResponsibilitiesConditionInput
+  userPossibleRiderResponsibilitiesId: ModelIDInput
+  riderResponsibilityPossibleUsersId: ModelIDInput
+}
+
+input CreatePossibleRiderResponsibilitiesInput {
+  id: ID
+  tenantId: ID!
+  _version: Int
+  userPossibleRiderResponsibilitiesId: ID
+  riderResponsibilityPossibleUsersId: ID
+}
+
+input UpdatePossibleRiderResponsibilitiesInput {
+  id: ID!
+  tenantId: ID
+  _version: Int
+  userPossibleRiderResponsibilitiesId: ID
+  riderResponsibilityPossibleUsersId: ID
+}
+
+input DeletePossibleRiderResponsibilitiesInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionPossibleRiderResponsibilitiesFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  and: [ModelSubscriptionPossibleRiderResponsibilitiesFilterInput]
+  or: [ModelSubscriptionPossibleRiderResponsibilitiesFilterInput]
+}
+
+type ModelVehicleConnection @aws_iam @aws_cognito_user_pools {
+  items: [Vehicle]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelVehicleFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  name: ModelStringInput
+  manufacturer: ModelStringInput
+  model: ModelStringInput
+  dateOfManufacture: ModelStringInput
+  dateOfRegistration: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelVehicleFilterInput]
+  or: [ModelVehicleFilterInput]
+  not: ModelVehicleFilterInput
+}
+
+input ModelVehicleConditionInput {
+  tenantId: ModelIDInput
+  name: ModelStringInput
+  manufacturer: ModelStringInput
+  model: ModelStringInput
+  dateOfManufacture: ModelStringInput
+  dateOfRegistration: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelVehicleConditionInput]
+  or: [ModelVehicleConditionInput]
+  not: ModelVehicleConditionInput
+}
+
+input CreateVehicleInput {
+  id: ID
+  tenantId: ID!
+  name: String
+  manufacturer: String
+  model: String
+  dateOfManufacture: AWSDate
+  dateOfRegistration: AWSDate
+  disabled: Int
+  _version: Int
+}
+
+input UpdateVehicleInput {
+  id: ID!
+  tenantId: ID
+  name: String
+  manufacturer: String
+  model: String
+  dateOfManufacture: AWSDate
+  dateOfRegistration: AWSDate
+  disabled: Int
+  _version: Int
+}
+
+input DeleteVehicleInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionVehicleFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  manufacturer: ModelSubscriptionStringInput
+  model: ModelSubscriptionStringInput
+  dateOfManufacture: ModelSubscriptionStringInput
+  dateOfRegistration: ModelSubscriptionStringInput
+  disabled: ModelSubscriptionIntInput
+  and: [ModelSubscriptionVehicleFilterInput]
+  or: [ModelSubscriptionVehicleFilterInput]
+}
+
+type ModelVehicleAssignmentConnection @aws_iam @aws_cognito_user_pools {
+  items: [VehicleAssignment]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelVehicleAssignmentFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  and: [ModelVehicleAssignmentFilterInput]
+  or: [ModelVehicleAssignmentFilterInput]
+  not: ModelVehicleAssignmentFilterInput
+  userVehicleAssignmentsId: ModelIDInput
+  vehicleAssignmentsId: ModelIDInput
+}
+
+input ModelVehicleAssignmentConditionInput {
+  tenantId: ModelIDInput
+  and: [ModelVehicleAssignmentConditionInput]
+  or: [ModelVehicleAssignmentConditionInput]
+  not: ModelVehicleAssignmentConditionInput
+  userVehicleAssignmentsId: ModelIDInput
+  vehicleAssignmentsId: ModelIDInput
+}
+
+input CreateVehicleAssignmentInput {
+  id: ID
+  tenantId: ID!
+  _version: Int
+  userVehicleAssignmentsId: ID
+  vehicleAssignmentsId: ID
+}
+
+input UpdateVehicleAssignmentInput {
+  id: ID!
+  tenantId: ID
+  _version: Int
+  userVehicleAssignmentsId: ID
+  vehicleAssignmentsId: ID
+}
+
+input DeleteVehicleAssignmentInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionVehicleAssignmentFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  and: [ModelSubscriptionVehicleAssignmentFilterInput]
+  or: [ModelSubscriptionVehicleAssignmentFilterInput]
+}
+
+type ModelLocationConnection @aws_iam @aws_cognito_user_pools {
+  items: [Location]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelLocationFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  name: ModelStringInput
+  listed: ModelIntInput
+  ward: ModelStringInput
+  line1: ModelStringInput
+  line2: ModelStringInput
+  line3: ModelStringInput
+  town: ModelStringInput
+  county: ModelStringInput
+  state: ModelStringInput
+  country: ModelStringInput
+  postcode: ModelStringInput
+  what3words: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelLocationFilterInput]
+  or: [ModelLocationFilterInput]
+  not: ModelLocationFilterInput
+}
+
+input ModelLocationConditionInput {
+  tenantId: ModelIDInput
+  name: ModelStringInput
+  listed: ModelIntInput
+  ward: ModelStringInput
+  line1: ModelStringInput
+  line2: ModelStringInput
+  line3: ModelStringInput
+  town: ModelStringInput
+  county: ModelStringInput
+  state: ModelStringInput
+  country: ModelStringInput
+  postcode: ModelStringInput
+  what3words: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelLocationConditionInput]
+  or: [ModelLocationConditionInput]
+  not: ModelLocationConditionInput
+}
+
+input CreateLocationInput {
+  id: ID
+  tenantId: ID!
+  name: String
+  listed: Int
+  contact: AddressAndContactDetailsInput
+  ward: String
+  line1: String
+  line2: String
+  line3: String
+  town: String
+  county: String
+  state: String
+  country: String
+  postcode: String
+  what3words: String
+  disabled: Int
+  _version: Int
+}
+
+input UpdateLocationInput {
+  id: ID!
+  tenantId: ID
+  name: String
+  listed: Int
+  contact: AddressAndContactDetailsInput
+  ward: String
+  line1: String
+  line2: String
+  line3: String
+  town: String
+  county: String
+  state: String
+  country: String
+  postcode: String
+  what3words: String
+  disabled: Int
+  _version: Int
+}
+
+input DeleteLocationInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionLocationFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  listed: ModelSubscriptionIntInput
+  ward: ModelSubscriptionStringInput
+  line1: ModelSubscriptionStringInput
+  line2: ModelSubscriptionStringInput
+  line3: ModelSubscriptionStringInput
+  town: ModelSubscriptionStringInput
+  county: ModelSubscriptionStringInput
+  state: ModelSubscriptionStringInput
+  country: ModelSubscriptionStringInput
+  postcode: ModelSubscriptionStringInput
+  what3words: ModelSubscriptionStringInput
+  disabled: ModelSubscriptionIntInput
+  and: [ModelSubscriptionLocationFilterInput]
+  or: [ModelSubscriptionLocationFilterInput]
+}
+
+type ModelTaskConnection @aws_iam @aws_cognito_user_pools {
+  items: [Task]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelPriorityInput {
+  eq: Priority
+  ne: Priority
+}
+
+input ModelTaskStatusInput {
+  eq: TaskStatus
+  ne: TaskStatus
+}
+
+input ModelTaskFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  timeOfCall: ModelStringInput
+  timePickedUp: ModelStringInput
+  timeDroppedOff: ModelStringInput
+  timeCancelled: ModelStringInput
+  timeRejected: ModelStringInput
+  timeRiderHome: ModelStringInput
+  pickUpLocationId: ModelIDInput
+  dropOffLocationId: ModelIDInput
+  establishmentLocationId: ModelIDInput
+  riderResponsibility: ModelStringInput
+  priority: ModelPriorityInput
+  status: ModelTaskStatusInput
+  and: [ModelTaskFilterInput]
+  or: [ModelTaskFilterInput]
+  not: ModelTaskFilterInput
+  userCreatedTasksId: ModelIDInput
+}
+
+input ModelTaskConditionInput {
+  tenantId: ModelIDInput
+  timeOfCall: ModelStringInput
+  timePickedUp: ModelStringInput
+  timeDroppedOff: ModelStringInput
+  timeCancelled: ModelStringInput
+  timeRejected: ModelStringInput
+  timeRiderHome: ModelStringInput
+  pickUpLocationId: ModelIDInput
+  dropOffLocationId: ModelIDInput
+  establishmentLocationId: ModelIDInput
+  riderResponsibility: ModelStringInput
+  priority: ModelPriorityInput
+  status: ModelTaskStatusInput
+  and: [ModelTaskConditionInput]
+  or: [ModelTaskConditionInput]
+  not: ModelTaskConditionInput
+  userCreatedTasksId: ModelIDInput
+}
+
+input CreateTaskInput {
+  id: ID
+  tenantId: ID!
+  timeOfCall: AWSDateTime
+  timePickedUp: AWSDateTime
+  timeDroppedOff: AWSDateTime
+  timeCancelled: AWSDateTime
+  timeRejected: AWSDateTime
+  timeRiderHome: AWSDateTime
+  requesterContact: AddressAndContactDetailsInput
+  pickUpLocationId: ID
+  dropOffLocationId: ID
+  establishmentLocationId: ID
+  riderResponsibility: String
+  priority: Priority
+  status: TaskStatus
+  _version: Int
+  userCreatedTasksId: ID
+}
+
+input UpdateTaskInput {
+  id: ID!
+  tenantId: ID
+  timeOfCall: AWSDateTime
+  timePickedUp: AWSDateTime
+  timeDroppedOff: AWSDateTime
+  timeCancelled: AWSDateTime
+  timeRejected: AWSDateTime
+  timeRiderHome: AWSDateTime
+  requesterContact: AddressAndContactDetailsInput
+  pickUpLocationId: ID
+  dropOffLocationId: ID
+  establishmentLocationId: ID
+  riderResponsibility: String
+  priority: Priority
+  status: TaskStatus
+  _version: Int
+  userCreatedTasksId: ID
+}
+
+input DeleteTaskInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionTaskFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  timeOfCall: ModelSubscriptionStringInput
+  timePickedUp: ModelSubscriptionStringInput
+  timeDroppedOff: ModelSubscriptionStringInput
+  timeCancelled: ModelSubscriptionStringInput
+  timeRejected: ModelSubscriptionStringInput
+  timeRiderHome: ModelSubscriptionStringInput
+  pickUpLocationId: ModelSubscriptionIDInput
+  dropOffLocationId: ModelSubscriptionIDInput
+  establishmentLocationId: ModelSubscriptionIDInput
+  riderResponsibility: ModelSubscriptionStringInput
+  priority: ModelSubscriptionStringInput
+  status: ModelSubscriptionStringInput
+  and: [ModelSubscriptionTaskFilterInput]
+  or: [ModelSubscriptionTaskFilterInput]
+}
+
+type ModelTaskAssigneeConnection @aws_iam @aws_cognito_user_pools {
+  items: [TaskAssignee]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelTaskAssigneeFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  taskId: ModelIDInput
+  assigneeId: ModelIDInput
+  role: ModelRoleInput
+  and: [ModelTaskAssigneeFilterInput]
+  or: [ModelTaskAssigneeFilterInput]
+  not: ModelTaskAssigneeFilterInput
+}
+
+input ModelTaskAssigneeConditionInput {
+  tenantId: ModelIDInput
+  taskId: ModelIDInput
+  assigneeId: ModelIDInput
+  role: ModelRoleInput
+  and: [ModelTaskAssigneeConditionInput]
+  or: [ModelTaskAssigneeConditionInput]
+  not: ModelTaskAssigneeConditionInput
+}
+
+input CreateTaskAssigneeInput {
+  id: ID
+  tenantId: ID!
+  taskId: ID!
+  assigneeId: ID!
+  role: Role!
+  _version: Int
+}
+
+input UpdateTaskAssigneeInput {
+  id: ID!
+  tenantId: ID
+  taskId: ID
+  assigneeId: ID
+  role: Role
+  _version: Int
+}
+
+input DeleteTaskAssigneeInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionTaskAssigneeFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  taskId: ModelSubscriptionIDInput
+  assigneeId: ModelSubscriptionIDInput
+  role: ModelSubscriptionStringInput
+  and: [ModelSubscriptionTaskAssigneeFilterInput]
+  or: [ModelSubscriptionTaskAssigneeFilterInput]
+}
+
+type ModelCommentConnection @aws_iam @aws_cognito_user_pools {
+  items: [Comment]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelCommentVisibilityInput {
+  eq: CommentVisibility
+  ne: CommentVisibility
+}
+
+input ModelCommentFilterInput {
+  id: ModelIDInput
+  parentId: ModelIDInput
+  tenantId: ModelIDInput
+  body: ModelStringInput
+  visibility: ModelCommentVisibilityInput
+  and: [ModelCommentFilterInput]
+  or: [ModelCommentFilterInput]
+  not: ModelCommentFilterInput
+  userCommentsId: ModelIDInput
+}
+
+input ModelCommentConditionInput {
+  parentId: ModelIDInput
+  tenantId: ModelIDInput
+  body: ModelStringInput
+  visibility: ModelCommentVisibilityInput
+  and: [ModelCommentConditionInput]
+  or: [ModelCommentConditionInput]
+  not: ModelCommentConditionInput
+  userCommentsId: ModelIDInput
+}
+
+input CreateCommentInput {
+  id: ID
+  parentId: ID
+  tenantId: ID!
+  body: String
+  visibility: CommentVisibility
+  _version: Int
+  userCommentsId: ID
+}
+
+input UpdateCommentInput {
+  id: ID!
+  parentId: ID
+  tenantId: ID
+  body: String
+  visibility: CommentVisibility
+  _version: Int
+  userCommentsId: ID
+}
+
+input DeleteCommentInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionCommentFilterInput {
+  id: ModelSubscriptionIDInput
+  parentId: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  body: ModelSubscriptionStringInput
+  visibility: ModelSubscriptionStringInput
+  and: [ModelSubscriptionCommentFilterInput]
+  or: [ModelSubscriptionCommentFilterInput]
+}
+
+type ModelDeliverableTypeConnection @aws_iam @aws_cognito_user_pools {
+  items: [DeliverableType]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelDeliverableTypeIconInput {
+  eq: DeliverableTypeIcon
+  ne: DeliverableTypeIcon
+}
+
+input ModelDeliverableUnitInput {
+  eq: DeliverableUnit
+  ne: DeliverableUnit
+}
+
+input ModelDeliverableTypeFilterInput {
+  id: ModelIDInput
+  label: ModelStringInput
+  tenantId: ModelIDInput
+  icon: ModelDeliverableTypeIconInput
+  defaultUnit: ModelDeliverableUnitInput
+  tags: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelDeliverableTypeFilterInput]
+  or: [ModelDeliverableTypeFilterInput]
+  not: ModelDeliverableTypeFilterInput
+}
+
+input ModelDeliverableTypeConditionInput {
+  label: ModelStringInput
+  tenantId: ModelIDInput
+  icon: ModelDeliverableTypeIconInput
+  defaultUnit: ModelDeliverableUnitInput
+  tags: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelDeliverableTypeConditionInput]
+  or: [ModelDeliverableTypeConditionInput]
+  not: ModelDeliverableTypeConditionInput
+}
+
+input CreateDeliverableTypeInput {
+  id: ID
+  label: String!
+  tenantId: ID!
+  icon: DeliverableTypeIcon
+  defaultUnit: DeliverableUnit
+  tags: [String]
+  disabled: Int
+  _version: Int
+}
+
+input UpdateDeliverableTypeInput {
+  id: ID!
+  label: String
+  tenantId: ID
+  icon: DeliverableTypeIcon
+  defaultUnit: DeliverableUnit
+  tags: [String]
+  disabled: Int
+  _version: Int
+}
+
+input DeleteDeliverableTypeInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionDeliverableTypeFilterInput {
+  id: ModelSubscriptionIDInput
+  label: ModelSubscriptionStringInput
+  tenantId: ModelSubscriptionIDInput
+  icon: ModelSubscriptionStringInput
+  defaultUnit: ModelSubscriptionStringInput
+  tags: ModelSubscriptionStringInput
+  disabled: ModelSubscriptionIntInput
+  and: [ModelSubscriptionDeliverableTypeFilterInput]
+  or: [ModelSubscriptionDeliverableTypeFilterInput]
+}
+
+type ModelDeliverableConnection @aws_iam @aws_cognito_user_pools {
+  items: [Deliverable]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelDeliverableFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  count: ModelIntInput
+  unit: ModelDeliverableUnitInput
+  orderInGrid: ModelIntInput
+  and: [ModelDeliverableFilterInput]
+  or: [ModelDeliverableFilterInput]
+  not: ModelDeliverableFilterInput
+  taskDeliverablesId: ModelIDInput
+  deliverableTypeDeliverablesId: ModelIDInput
+}
+
+input ModelDeliverableConditionInput {
+  tenantId: ModelIDInput
+  count: ModelIntInput
+  unit: ModelDeliverableUnitInput
+  orderInGrid: ModelIntInput
+  and: [ModelDeliverableConditionInput]
+  or: [ModelDeliverableConditionInput]
+  not: ModelDeliverableConditionInput
+  taskDeliverablesId: ModelIDInput
+  deliverableTypeDeliverablesId: ModelIDInput
+}
+
+input CreateDeliverableInput {
+  id: ID
+  tenantId: ID!
+  count: Int
+  unit: DeliverableUnit
+  orderInGrid: Int
+  _version: Int
+  taskDeliverablesId: ID
+  deliverableTypeDeliverablesId: ID
+}
+
+input UpdateDeliverableInput {
+  id: ID!
+  tenantId: ID
+  count: Int
+  unit: DeliverableUnit
+  orderInGrid: Int
+  _version: Int
+  taskDeliverablesId: ID
+  deliverableTypeDeliverablesId: ID
+}
+
+input DeleteDeliverableInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionDeliverableFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  count: ModelSubscriptionIntInput
+  unit: ModelSubscriptionStringInput
+  orderInGrid: ModelSubscriptionIntInput
+  and: [ModelSubscriptionDeliverableFilterInput]
+  or: [ModelSubscriptionDeliverableFilterInput]
+}
+
+type ModelRiderResponsibilityConnection @aws_iam @aws_cognito_user_pools {
+  items: [RiderResponsibility]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelRiderResponsibilityFilterInput {
+  id: ModelIDInput
+  tenantId: ModelIDInput
+  label: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelRiderResponsibilityFilterInput]
+  or: [ModelRiderResponsibilityFilterInput]
+  not: ModelRiderResponsibilityFilterInput
+}
+
+input ModelRiderResponsibilityConditionInput {
+  tenantId: ModelIDInput
+  label: ModelStringInput
+  disabled: ModelIntInput
+  and: [ModelRiderResponsibilityConditionInput]
+  or: [ModelRiderResponsibilityConditionInput]
+  not: ModelRiderResponsibilityConditionInput
+}
+
+input CreateRiderResponsibilityInput {
+  id: ID
+  tenantId: ID!
+  label: String!
+  disabled: Int
+  _version: Int
+}
+
+input UpdateRiderResponsibilityInput {
+  id: ID!
+  tenantId: ID
+  label: String
+  disabled: Int
+  _version: Int
+}
+
+input DeleteRiderResponsibilityInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionRiderResponsibilityFilterInput {
+  id: ModelSubscriptionIDInput
+  tenantId: ModelSubscriptionIDInput
+  label: ModelSubscriptionStringInput
+  disabled: ModelSubscriptionIntInput
+  and: [ModelSubscriptionRiderResponsibilityFilterInput]
+  or: [ModelSubscriptionRiderResponsibilityFilterInput]
+}
+
+input ModelIDKeyConditionInput {
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  between: [ID]
+  beginsWith: ID
+}
+
